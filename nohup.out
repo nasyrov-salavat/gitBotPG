@@ -1,0 +1,303 @@
+Updates were skipped successfully.
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+Updates were skipped successfully.
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
+Task exception was never retrieved
+future: <Task finished name='Task-33' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=TesseractNotFoundError("C:\\Program Files\\Tesseract-OCR\\tesseract is not installed or it's not in your PATH. See README file for more information.")>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 254, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/usr/lib/python3.10/subprocess.py", line 966, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1842, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Program Files\\Tesseract-OCR\\tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/client.py", line 96, in photoInventar
+    string = pytesseract.image_to_string (image, config = 'outputbase digits')
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 416, in image_to_string
+    return {
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 419, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 286, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 258, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: C:\Program Files\Tesseract-OCR\tesseract is not installed or it's not in your PATH. See README file for more information.
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
+Task exception was never retrieved
+future: <Task finished name='Task-40' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=TesseractNotFoundError("C:\\Program Files\\Tesseract-OCR\\tesseract is not installed or it's not in your PATH. See README file for more information.")>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 254, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/usr/lib/python3.10/subprocess.py", line 966, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1842, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Program Files\\Tesseract-OCR\\tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/client.py", line 96, in photoInventar
+    string = pytesseract.image_to_string (image, config = 'outputbase digits')
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 416, in image_to_string
+    return {
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 419, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 286, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 258, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: C:\Program Files\Tesseract-OCR\tesseract is not installed or it's not in your PATH. See README file for more information.
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
+Task exception was never retrieved
+future: <Task finished name='Task-47' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=TesseractNotFoundError("C:\\Program Files\\Tesseract-OCR\\tesseract is not installed or it's not in your PATH. See README file for more information.")>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 254, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/usr/lib/python3.10/subprocess.py", line 966, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1842, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Program Files\\Tesseract-OCR\\tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/client.py", line 96, in photoInventar
+    string = pytesseract.image_to_string (image, config = 'outputbase digits')
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 416, in image_to_string
+    return {
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 419, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 286, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 258, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: C:\Program Files\Tesseract-OCR\tesseract is not installed or it's not in your PATH. See README file for more information.
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+img/AQADzLwxG3wmgEl4.jpg
+img/AQADzbwxG3wmgEl4.jpg
+img/AQADH7wxG3wmgEl4.jpg
+Updates were skipped successfully.
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
+Task exception was never retrieved
+future: <Task finished name='Task-27' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=TesseractNotFoundError("C:\\Program Files\\Tesseract-OCR\\tesseract is not installed or it's not in your PATH. See README file for more information.")>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 254, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/usr/lib/python3.10/subprocess.py", line 966, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1842, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Program Files\\Tesseract-OCR\\tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/client.py", line 96, in photoInventar
+    string = pytesseract.image_to_string (image, config = 'outputbase digits')
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 416, in image_to_string
+    return {
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 419, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 286, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/pytesseract/pytesseract.py", line 258, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: C:\Program Files\Tesseract-OCR\tesseract is not installed or it's not in your PATH. See README file for more information.
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+img/AQADH7wxG3wmgEl4.jpg
+Updates were skipped successfully.
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+Updates were skipped successfully.
+Cause exception while getting updates.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/base.py", line 231, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/api.py", line 119, in check_result
+    exceptions.ConflictError.detect(description)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/utils/exceptions.py", line 140, in detect
+    raise err(cls.text or description)
+aiogram.utils.exceptions.TerminatedByOtherGetUpdates: Terminated by other getupdates request; make sure that only one bot instance is running
+Cause exception while getting updates.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/base.py", line 231, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/api.py", line 119, in check_result
+    exceptions.ConflictError.detect(description)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/utils/exceptions.py", line 140, in detect
+    raise err(cls.text or description)
+aiogram.utils.exceptions.TerminatedByOtherGetUpdates: Terminated by other getupdates request; make sure that only one bot instance is running
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
+Cause exception while getting updates.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/base.py", line 231, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/bot/api.py", line 128, in check_result
+    raise exceptions.TelegramAPIError(description)
+aiogram.utils.exceptions.TelegramAPIError: Bad Gateway
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+img/AQADL7wxG3wmiEl4.jpg
+Updates were skipped successfully.
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+Updates were skipped successfully.
+Goodbye!
+Бот онлайн
+Подключение в БД успешно
+Updates were skipped successfully.
+Task exception was never retrieved
+future: <Task finished name='Task-23' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/other.py", line 7, in profanity
+    .intersection(set(json.load(open('profanity\cenz.json')))) != set():
+FileNotFoundError: [Errno 2] No such file or directory: 'profanity\\cenz.json'
+Task exception was never retrieved
+future: <Task finished name='Task-31' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/other.py", line 7, in profanity
+    .intersection(set(json.load(open('profanity\cenz.json')))) != set():
+FileNotFoundError: [Errno 2] No such file or directory: 'profanity\\cenz.json'
+Traceback (most recent call last):
+  File "/CBMObot/main.py", line 12, in <module>
+    import handlers.client as client
+  File "/CBMObot/handlers/client.py", line 15, in <module>
+    from profanity import to_json
+  File "/CBMObot/profanity/to_json.py", line 4, in <module>
+    with open('profanity\profanity.txt', encoding='UTF-8') as r:
+FileNotFoundError: [Errno 2] No such file or directory: 'profanity\\profanity.txt'
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
+Task exception was never retrieved
+future: <Task finished name='Task-86' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/other.py", line 7, in profanity
+    .intersection(set(json.load(open('profanity\cenz.json')))) != set():
+FileNotFoundError: [Errno 2] No such file or directory: 'profanity\\cenz.json'
+Task exception was never retrieved
+future: <Task finished name='Task-89' coro=<Dispatcher._process_polling_updates() done, defined at /usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py:407> exception=FileNotFoundError(2, 'No such file or directory')>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 415, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 235, in process_updates
+    return await asyncio.gather(*tasks)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/dispatcher.py", line 256, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "/usr/local/lib/python3.10/dist-packages/aiogram/dispatcher/handler.py", line 116, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "/CBMObot/handlers/other.py", line 7, in profanity
+    .intersection(set(json.load(open('profanity\cenz.json')))) != set():
+FileNotFoundError: [Errno 2] No such file or directory: 'profanity\\cenz.json'
+/usr/local/lib/python3.10/dist-packages/aiogram/types/mixins.py:40: DeprecationWarning: destination parameter is deprecated, please use destination_dir or destination_file.
+  warn_deprecated(
