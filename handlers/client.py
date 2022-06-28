@@ -10,61 +10,73 @@ from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from test import TOKEN
 from aiogram.contrib.fsm_storage.memory import MemoryStorage #Хранение данных в ОЗУ
-import psycopg2
+
+from mysql.connector import connect, Error
 
 
-def sql_start():
-   
-    global con, cur 
-    con = psycopg2.connect(
-        database="CBMO", 
-        user="postgres", 
-        password="1963", 
-        host="127.0.0.1", 
-        port="5432"
-    )
-    cur = con.cursor()  
-    if con:
-        print('Подключение в БД успешно')
 
-    cur.execute('''CREATE TABLE if not exists USERS 
-    (   
-        id_user INT,
-        firstname CHARACTER VARYING(50),
-        lastname CHARACTER VARYING(50),
-        name_device CHARACTER VARYING(50),
-        description text);''')
+create_table_name = """
+CREATE TABLE if not exists name(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT,
+    firstname VARCHAR(100),
+    lastname VARCHAR(100),
+    name_device VARCHAR(50)
+)
+"""
 
-    cur.execute('''CREATE TABLE if not exists NAME 
-        (   id INT PRIMARY KEY,
-            id_user INT,
-            firstname CHARACTER VARYING(50),
-            lastname CHARACTER VARYING(50),
-            name_device CHARACTER VARYING(50),
-            description text);''')
-    
-    cur.execute('''CREATE TABLE if not exists DESCRIPTION 
-    (   id INT PRIMARY KEY, 
-        id_user INT,      
-        description text);''')
-    
-    cur.execute('''CREATE TABLE if not exists PHOTO_INV 
-    (   id INT PRIMARY KEY, 
-        id_user INT,      
-        photo_inventar text,
-        photo_puth text);''')
+create_table_description = """
+CREATE TABLE if not exists description(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT,
+    description VARCHAR(200)
+)
+"""
 
-    cur.execute('''CREATE TABLE if not exists CONTACT_USER 
-    (   id INT PRIMARY KEY, 
-        id_user INT,      
-        contact_user text);''')
+create_table_photo_inv = """
+CREATE TABLE if not exists photo_inv(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT,
+    photo_inventar VARCHAR(200),
+    photo_puth VARCHAR(200)
+)
+"""
 
-    con.commit()  
+create_table_contact_user = """
+CREATE TABLE if not exists contact_user(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT,
+    contact_user VARCHAR(200)
+)
+"""
+
+async def on_startup(_):
+    try: 
+        with connect(
+                host="62.113.109.168",
+                user="CBMO",
+                password="Privet1963$$$",
+                database="CBMO"
+               
+        ) as connection:
+            print('Подключено к базе данных')
+            with connection.cursor() as cursor: 
+               
+                cursor.execute(create_table_name)
+                cursor.execute(create_table_description)
+                cursor.execute(create_table_photo_inv)
+                cursor.execute(create_table_contact_user)
+                connection.commit()
+           
+    except Error as e:
+        print('Не удалось подключиться ')
+
 
 
 storage=MemoryStorage()
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=storage)
+
 
 async def command_start(message: types.Message):
         await bot.send_message(message.from_user.id, f'Здравствуйте, <strong>{message.from_user.first_name} {message.from_user.last_name}.\n\
@@ -108,15 +120,29 @@ async def cm_start(message: types.Message):
     await message.answer('Выберите устройство, которое необходимо починить', reply_markup=keyboardDevice)
 
 async def nameDevice(message: types.Message, state: FSMContext ):
+  
     async with state.proxy() as data:
+        mydb = on_startup()
+        cur = mydb.cursor()
+
+
         id_user = message.from_user.id
         firstname = message.from_user.first_name
         lastname = message.from_user.last_name
         name_device = message.text
         number = str(random.randint(1, 1000000))
         data['appeal'] = number     
-        cur.execute("INSERT INTO NAME (id, id_user, firstname, lastname, name_device ) VALUES (%s, %s, %s, %s, %s);", (data['appeal'], id_user, firstname, lastname,name_device ))
-        con.commit()
+     
+        sql = "insert into name(id_user, firstname, lastname, name_device, number) values(%s, %s, %s, %s, %s)" 
+        val =(id_user, firstname, lastname, name_device, number)
+        try: 
+            cur.execute(sql,val) 
+            cur.commit() 
+        except: 
+            print('Не')
+            cur.rollback()
+
+
         await FSMAdmin.next()
         await message.answer('Опишите кратко проблему, которую необходимо решить')
 
@@ -125,8 +151,8 @@ async def description(message: types.Message, state: FSMContext):
         number = data['appeal'] 
         id_user = message.from_user.id
         description = message.text
-        cur.execute("INSERT INTO DESCRIPTION (id, id_user, description ) VALUES (%s, %s, %s);", (number, id_user, description))
-        con.commit()
+        # cur.execute("INSERT INTO DESCRIPTION (id, id_user, description ) VALUES (%s, %s, %s);", (number, id_user, description))
+        # con.commit()
         # cur.execute("SELECT NAME.id, NAME.id_user, firstname, lastname, name_device, DESCRIPTION.id, DESCRIPTION.description FROM NAME INNER JOIN DESCRIPTION ON DESCRIPTION.id = NAME.id;")    
         # con.commit()
         await FSMAdmin.next()
@@ -171,8 +197,8 @@ async def photoInventar(message: types.Message, state: FSMContext):
         
         await message.answer('Подскажите, ваш инвентарный номер = ' + getUpdateText + ' ?', reply_markup = keyboards)
         await FSMAdmin.next()
-        cur.execute("INSERT INTO PHOTO_INV (id, id_user, photo_inventar, photo_puth ) VALUES (%s, %s, %s, %s);", (number, id_user, photo_inventar, photo_puth))
-        con.commit()
+        # cur.execute("INSERT INTO PHOTO_INV (id, id_user, photo_inventar, photo_puth ) VALUES (%s, %s, %s, %s);", (number, id_user, photo_inventar, photo_puth))
+        # con.commit()
 
 async def contactUser(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -196,8 +222,8 @@ async def numberAppeal(message: types.Message, state: FSMContext):
         number = data['appeal'] 
         id_user = message.from_user.id    
         contact_user = message.contact.phone_number 
-        cur.execute("INSERT INTO CONTACT_USER (id, id_user, contact_user ) VALUES (%s, %s, %s);", (number, id_user, contact_user))
-        con.commit()
+        # cur.execute("INSERT INTO CONTACT_USER (id, id_user, contact_user ) VALUES (%s, %s, %s);", (number, id_user, contact_user))
+        # con.commit()
 
             
     await message.answer('Спасибо за обращение. Номер вашей заявки = ' + number,  reply_markup=keyboards_Client)
