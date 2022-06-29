@@ -15,40 +15,13 @@ from mysql.connector import connect, Error
 import mysql.connector
 
 
-create_table_name = """
-CREATE TABLE if not exists name(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT,
-    firstname VARCHAR(100),
-    lastname VARCHAR(100),
-    name_device VARCHAR(50)
-)
-"""
+create_table_name = 'CREATE TABLE if not exists name(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,firstname TEXT,lastname TEXT,name_device TEXT)'
 
-create_table_description = """
-CREATE TABLE if not exists description(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT,
-    description VARCHAR(200)
-)
-"""
+create_table_description = 'CREATE TABLE if not exists description(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,description TEXT)'
 
-create_table_photo_inv = """
-CREATE TABLE if not exists photo_inv(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT,
-    photo_inventar VARCHAR(200),
-    photo_puth VARCHAR(200)
-)
-"""
+create_table_photo_inv = 'CREATE TABLE if not exists photo_inv(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,photo_inventar TEXT,photo_puth TEXT)'
 
-create_table_contact_user = """
-CREATE TABLE if not exists contact_user(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT,
-    contact_user VARCHAR(200)
-)
-"""
+create_table_contact_user = 'CREATE TABLE if not exists contact_user(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,contact_user TEXT)'
 
 try: 
     db =  mysql.connector.connect(
