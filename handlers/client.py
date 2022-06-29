@@ -12,7 +12,7 @@ from test import TOKEN
 from aiogram.contrib.fsm_storage.memory import MemoryStorage #Хранение данных в ОЗУ
 
 from mysql.connector import connect, Error
-
+import mysql.connector
 
 
 create_table_name = """
@@ -50,29 +50,31 @@ CREATE TABLE if not exists contact_user(
 )
 """
 
-async def on_startup(_):
-    try: 
-        with connect(
-                host="62.113.109.168",
-                user="CBMO",
-                password="Privet1963$$$",
-                database="CBMO"
-               
-        ) as connection:
-            print('Подключено к базе данных')
-            with connection.cursor() as cursor: 
-               
-                cursor.execute(create_table_name)
-                cursor.execute(create_table_description)
-                cursor.execute(create_table_photo_inv)
-                cursor.execute(create_table_contact_user)
-                connection.commit()
+try: 
+    db =  mysql.connector.connect(
+            host="62.113.109.168",
+            user="CBMO",
+            password="Privet1963$$$",
+            database="CBMO",
+    )
+            
+    with db.cursor() as cursor: 
+        
+        cursor.execute(create_table_name)
+        cursor.execute(create_table_description)
+        cursor.execute(create_table_photo_inv)
+        cursor.execute(create_table_contact_user)
+        db.commit()
            
-    except Error as e:
-        print('Не удалось подключиться ')
+except Error as e:
+    print('Не удалось подключиться ')
 
 
+async def on_startup(_):
+    print('Подключено к базе данных')
+    
 
+cur = db.cursor()
 storage=MemoryStorage()
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=storage)
@@ -119,30 +121,18 @@ async def cm_start(message: types.Message):
     await FSMAdmin.next()
     await message.answer('Выберите устройство, которое необходимо починить', reply_markup=keyboardDevice)
 
-async def nameDevice(message: types.Message, state: FSMContext ):
-  
+async def nameDevice(message: types.Message, state: FSMContext ): 
     async with state.proxy() as data:
-        mydb = on_startup()
-        cur = mydb.cursor()
-
-
         id_user = message.from_user.id
         firstname = message.from_user.first_name
         lastname = message.from_user.last_name
         name_device = message.text
         number = str(random.randint(1, 1000000))
         data['appeal'] = number     
-     
-        sql = "insert into name(id_user, firstname, lastname, name_device, number) values(%s, %s, %s, %s, %s)" 
-        val =(id_user, firstname, lastname, name_device, number)
-        try: 
-            cur.execute(sql,val) 
-            cur.commit() 
-        except: 
-            print('Не')
-            cur.rollback()
-
-
+        sql = "insert into name(id_user, firstname, lastname, name_device) values(%s, %s, %s, %s)" 
+        val =(id_user, firstname, lastname, name_device)
+        cur.execute(sql,val) 
+        db.commit()
         await FSMAdmin.next()
         await message.answer('Опишите кратко проблему, которую необходимо решить')
 
@@ -151,6 +141,10 @@ async def description(message: types.Message, state: FSMContext):
         number = data['appeal'] 
         id_user = message.from_user.id
         description = message.text
+        sql = "insert into description(id_user, description) values(%s, %s)" 
+        val =(id_user, description)
+        cur.execute(sql,val) 
+        db.commit()
         # cur.execute("INSERT INTO DESCRIPTION (id, id_user, description ) VALUES (%s, %s, %s);", (number, id_user, description))
         # con.commit()
         # cur.execute("SELECT NAME.id, NAME.id_user, firstname, lastname, name_device, DESCRIPTION.id, DESCRIPTION.description FROM NAME INNER JOIN DESCRIPTION ON DESCRIPTION.id = NAME.id;")    
@@ -166,6 +160,7 @@ async def photoInventar(message: types.Message, state: FSMContext):
         file_info = await bot.get_file(document_id)
         path_photo = f'img/{file_info.file_unique_id}.jpg'
         print(path_photo)
+
         await message.photo[-1].download(path_photo)
         image = cv2.imread(path_photo)
 ###########################################################################################################################################################################################
@@ -194,7 +189,10 @@ async def photoInventar(message: types.Message, state: FSMContext):
         data['photo_puth'] = str(path_photo)
         photo_inventar = getUpdateText # Для передачи в другую функцию
         photo_puth = str(path_photo)
-        
+        sql = "insert into photo_inv(id_user, photo_inventar, photo_puth) values(%s, %s, %s)" 
+        val =(id_user, photo_inventar,photo_puth )
+        cur.execute(sql,val) 
+        db.commit()
         await message.answer('Подскажите, ваш инвентарный номер = ' + getUpdateText + ' ?', reply_markup = keyboards)
         await FSMAdmin.next()
         # cur.execute("INSERT INTO PHOTO_INV (id, id_user, photo_inventar, photo_puth ) VALUES (%s, %s, %s, %s);", (number, id_user, photo_inventar, photo_puth))
@@ -222,6 +220,10 @@ async def numberAppeal(message: types.Message, state: FSMContext):
         number = data['appeal'] 
         id_user = message.from_user.id    
         contact_user = message.contact.phone_number 
+        sql = "insert into contact_user(id_user, contact_user) values(%s, %s)" 
+        val =(id_user, contact_user)
+        cur.execute(sql,val) 
+        db.commit()
         # cur.execute("INSERT INTO CONTACT_USER (id, id_user, contact_user ) VALUES (%s, %s, %s);", (number, id_user, contact_user))
         # con.commit()
 
