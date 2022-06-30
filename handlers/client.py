@@ -44,31 +44,40 @@ create_table_appeal = '''CREATE TABLE if not exists appeal(
                     contact_user TEXT, 
                     number TEXT )'''
 
-try: 
-    db =  mysql.connector.connect(
-            host=HOST,
-            user=USER,
-            password=PASSWORD,
-            database=DATABASE,
-    )
-    print('Происходит подключение к базе данных')
-    with db.cursor() as cursor:   
-        cursor.execute(create_table_name)
-        cursor.execute(create_table_description)
-        cursor.execute(create_table_photo_inv)
-        cursor.execute(create_table_contact_user)
-        cursor.execute(create_table_appeal)
-        db.commit()
-           
-except Error as e:
-    print('Не удалось подключиться ')
+def connect_setting():
+    global db_connection
+    db_connection = None
+    try: 
+        db_connection =  mysql.connector.connect(
+                host=HOST,
+                user=USER,
+                password=PASSWORD,
+                database=DATABASE,
+        )
+        print('Успешное подключение к базе данных')
+        global cur
+        cur = db_connection.cursor()
+        with db_connection.cursor() as cursor:   
+            cursor.execute(create_table_name)
+            cursor.execute(create_table_description)
+            cursor.execute(create_table_photo_inv)
+            cursor.execute(create_table_contact_user)
+            cursor.execute(create_table_appeal)
+            db_connection.commit()
+            
+    except Error as e:
+        print('Не удалось подключиться ')
+    
+
+
 
 
 async def on_startup(_):
-    print('Подключено')
-    
+    print('Происходит подключение к базе данных')
+    connect_setting()
+        
 
-cur = db.cursor()
+
 storage=MemoryStorage()
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=storage)
@@ -129,7 +138,7 @@ async def nameDevice(message: types.Message, state: FSMContext ):
         sql = "insert into name(id_user, firstname, lastname, name_device) values(%s, %s, %s, %s)" 
         val =(id_user, firstname, lastname, name_device)
         cur.execute(sql,val) 
-        db.commit()
+        db_connection.commit()
         
         data['GLid_user'] = id_user
         data['GLfirstname'] = firstname
@@ -148,7 +157,7 @@ async def description(message: types.Message, state: FSMContext):
         sql = "insert into description(id_user, description) values(%s, %s)" 
         val =(id_user, description)
         cur.execute(sql,val) 
-        db.commit()
+        db_connection.commit()
         
         await FSMAdmin.next()
         await message.answer('Сфотографируйте инвентарный номер')
@@ -192,7 +201,7 @@ async def photoInventar(message: types.Message, state: FSMContext):
         sql = "insert into photo_inv(id_user, photo_inventar, photo_puth) values(%s, %s, %s)" 
         val =(id_user, photo_inventar,photo_puth )
         cur.execute(sql,val) 
-        db.commit()
+        db_connection.commit()
 
         data['GLphoto_inventar'] = photo_inventar
         data['GLphoto_puth'] = photo_puth
@@ -225,12 +234,12 @@ async def numberAppeal(message: types.Message, state: FSMContext):
         sql = "insert into contact_user(id_user, contact_user) values(%s, %s)" 
         val =(id_user, contact_user)
         cur.execute(sql,val) 
-        db.commit()
+        db_connection.commit()
 
         appealsql = "insert into appeal(id_user, firstname, lastname, name_device, description, photo_inventar, photo_puth, contact_user, number ) values(%s, %s, %s, %s, %s, %s, %s, %s, %s)" 
         datasql =(data['GLid_user'], data['GLfirstname'],  data['GLlastname'], data['GLname_device'], data['GLdescription'], data['GLphoto_inventar'],data['GLphoto_puth'], data['GLcontact_user'], data['appeal'])
         cur.execute(appealsql,datasql) 
-        db.commit()
+        db_connection.commit()
             
     await message.answer('Спасибо за обращение. Номер вашей заявки = ' + number,  reply_markup=keyboards_Client)
     await state.finish()
