@@ -1,42 +1,63 @@
-from aiogram import Dispatcher, types
+from aiogram import Bot, Dispatcher, types
 from keyboards import keyboards_Client, keyboardDevice, addressInlineKeyboard
-from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher import FSMContext, Dispatcher
+from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.contrib.fsm_storage.memory import MemoryStorage #Хранение данных в ОЗУ
 import random
 import pytesseract
 import cv2
-from aiogram.dispatcher.filters import Text
-from aiogram import Bot 
-from aiogram.dispatcher import Dispatcher
-from test import TOKEN
-from aiogram.contrib.fsm_storage.memory import MemoryStorage #Хранение данных в ОЗУ
-
-from mysql.connector import connect, Error
+from mysql.connector import Error
 import mysql.connector
 
+from test import TOKEN, HOST, USER, PASSWORD, DATABASE
 
-create_table_name = 'CREATE TABLE if not exists name(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,firstname TEXT,lastname TEXT,name_device TEXT)'
+create_table_name = '''CREATE TABLE if not exists name(
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_user INT,firstname TEXT,
+                    lastname TEXT,
+                    name_device TEXT)'''
 
-create_table_description = 'CREATE TABLE if not exists description(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,description TEXT)'
+create_table_description = '''CREATE TABLE if not exists description(
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_user INT,
+                    description TEXT)'''
 
-create_table_photo_inv = 'CREATE TABLE if not exists photo_inv(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,photo_inventar TEXT,photo_puth TEXT)'
+create_table_photo_inv = '''CREATE TABLE if not exists photo_inv(
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_user INT,
+                    photo_inventar TEXT,
+                    photo_puth TEXT)'''
 
-create_table_contact_user = 'CREATE TABLE if not exists contact_user(id INT AUTO_INCREMENT PRIMARY KEY,id_user INT,contact_user TEXT)'
+create_table_contact_user = '''CREATE TABLE if not exists contact_user(
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_user INT,
+                    contact_user TEXT)'''
+
+create_table_appeal = '''CREATE TABLE if not exists appeal(
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id_user INT,firstname TEXT,
+                    lastname TEXT,name_device TEXT,
+                    description TEXT, 
+                    photo_inventar TEXT,
+                    photo_puth TEXT, 
+                    contact_user TEXT, 
+                    number TEXT )'''
 
 try: 
     db =  mysql.connector.connect(
-            host="62.113.109.168",
-            user="CBMO",
-            password="Privet1963$$$",
-            database="CBMO",
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE,
     )
-            
-    with db.cursor() as cursor: 
-        
+    print('Происходит подключение к базе данных')
+    with db.cursor() as cursor:   
         cursor.execute(create_table_name)
         cursor.execute(create_table_description)
         cursor.execute(create_table_photo_inv)
         cursor.execute(create_table_contact_user)
+        cursor.execute(create_table_appeal)
         db.commit()
            
 except Error as e:
@@ -44,7 +65,7 @@ except Error as e:
 
 
 async def on_startup(_):
-    print('Подключено к базе данных')
+    print('Подключено')
     
 
 cur = db.cursor()
@@ -52,6 +73,8 @@ storage=MemoryStorage()
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=storage)
 
+############################################################################################################################################################################################
+#################   СТАРТ БОТА  ######################################
 
 async def command_start(message: types.Message):
         await bot.send_message(message.from_user.id, f'Здравствуйте, <strong>{message.from_user.first_name} {message.from_user.last_name}.\n\
@@ -88,7 +111,7 @@ class FSMAdmin(StatesGroup):
     description = State() 
     photoInventar = State()
     contactUser = State() 
-    numberAppeal = State()                          
+    numberAppeal = State()       
 
 async def cm_start(message: types.Message):
     await FSMAdmin.next()
@@ -100,34 +123,38 @@ async def nameDevice(message: types.Message, state: FSMContext ):
         firstname = message.from_user.first_name
         lastname = message.from_user.last_name
         name_device = message.text
+        
         number = str(random.randint(1, 1000000))
         data['appeal'] = number     
         sql = "insert into name(id_user, firstname, lastname, name_device) values(%s, %s, %s, %s)" 
         val =(id_user, firstname, lastname, name_device)
         cur.execute(sql,val) 
         db.commit()
+        
+        data['GLid_user'] = id_user
+        data['GLfirstname'] = firstname
+        data['GLlastname'] = lastname
+        data['GLname_device'] = name_device
+
         await FSMAdmin.next()
         await message.answer('Опишите кратко проблему, которую необходимо решить')
 
 async def description(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        number = data['appeal'] 
         id_user = message.from_user.id
         description = message.text
+        data['GLdescription'] = description
+
         sql = "insert into description(id_user, description) values(%s, %s)" 
         val =(id_user, description)
         cur.execute(sql,val) 
         db.commit()
-        # cur.execute("INSERT INTO DESCRIPTION (id, id_user, description ) VALUES (%s, %s, %s);", (number, id_user, description))
-        # con.commit()
-        # cur.execute("SELECT NAME.id, NAME.id_user, firstname, lastname, name_device, DESCRIPTION.id, DESCRIPTION.description FROM NAME INNER JOIN DESCRIPTION ON DESCRIPTION.id = NAME.id;")    
-        # con.commit()
+        
         await FSMAdmin.next()
         await message.answer('Сфотографируйте инвентарный номер')
 
 async def photoInventar(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        number = data['appeal'] 
         id_user = message.from_user.id                        
         document_id = message.photo[0].file_id  # Получение уникального id для добавления в название файла
         file_info = await bot.get_file(document_id)
@@ -166,22 +193,22 @@ async def photoInventar(message: types.Message, state: FSMContext):
         val =(id_user, photo_inventar,photo_puth )
         cur.execute(sql,val) 
         db.commit()
+
+        data['GLphoto_inventar'] = photo_inventar
+        data['GLphoto_puth'] = photo_puth
+
         await message.answer('Подскажите, ваш инвентарный номер = ' + getUpdateText + ' ?', reply_markup = keyboards)
         await FSMAdmin.next()
-        # cur.execute("INSERT INTO PHOTO_INV (id, id_user, photo_inventar, photo_puth ) VALUES (%s, %s, %s, %s);", (number, id_user, photo_inventar, photo_puth))
-        # con.commit()
+
 
 async def contactUser(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         # if (message.text == "Да"):
-        #     number = data['appeal'] 
-        #     getUpdateText = data['photo_inventar']
-        #     data['photo_puth'] = 'Считал с фото корректно'
-        #     cur.execute("UPDATE PHOTO_INV SET (photo_puth ) = (%s) WHERE  ;", ('Считал с фото корректно',))
+        #     data['GLphoto_puth'] = 'Считал с фото корректно'
+        #     data['GLphoto_inventar']
         # else:
-        #     puth_fileUser = data['photo_puth']
-        #     data['photo_puth'] = puth_fileUser
         #     data['photo_inventar'] = 'Не считал с фото'
+        #     data['GLphoto_puth']
 
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Отправить номер 📱", request_contact=True))
@@ -193,13 +220,17 @@ async def numberAppeal(message: types.Message, state: FSMContext):
         number = data['appeal'] 
         id_user = message.from_user.id    
         contact_user = message.contact.phone_number 
+
+        data['GLcontact_user'] = contact_user
         sql = "insert into contact_user(id_user, contact_user) values(%s, %s)" 
         val =(id_user, contact_user)
         cur.execute(sql,val) 
         db.commit()
-        # cur.execute("INSERT INTO CONTACT_USER (id, id_user, contact_user ) VALUES (%s, %s, %s);", (number, id_user, contact_user))
-        # con.commit()
 
+        appealsql = "insert into appeal(id_user, firstname, lastname, name_device, description, photo_inventar, photo_puth, contact_user, number ) values(%s, %s, %s, %s, %s, %s, %s, %s, %s)" 
+        datasql =(data['GLid_user'], data['GLfirstname'],  data['GLlastname'], data['GLname_device'], data['GLdescription'], data['GLphoto_inventar'],data['GLphoto_puth'], data['GLcontact_user'], data['appeal'])
+        cur.execute(appealsql,datasql) 
+        db.commit()
             
     await message.answer('Спасибо за обращение. Номер вашей заявки = ' + number,  reply_markup=keyboards_Client)
     await state.finish()
@@ -223,4 +254,3 @@ def register_handlers_client(dp : Dispatcher):
     dp.register_message_handler(photoInventar, state = FSMAdmin.photoInventar, content_types='photo')
     dp.register_message_handler(contactUser, state = FSMAdmin.contactUser )
     dp.register_message_handler(numberAppeal, content_types=types.ContentType.CONTACT, state = FSMAdmin.numberAppeal)
-
