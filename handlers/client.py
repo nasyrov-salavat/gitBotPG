@@ -10,7 +10,7 @@ import cv2
 from mysql.connector import Error
 import mysql.connector
 
-from test import TOKEN, HOST, USER, PASSWORD, DATABASE
+from config import TOKEN, HOST, USER, PASSWORD, DATABASE
 
 create_table_name = '''CREATE TABLE if not exists name(
                     id INT AUTO_INCREMENT PRIMARY KEY,
