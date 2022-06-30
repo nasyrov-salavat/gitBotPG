@@ -1,3 +1,4 @@
+from telnetlib import STATUS
 from aiogram import Bot, Dispatcher, types
 from keyboards import keyboards_Client, keyboardDevice, addressInlineKeyboard
 from aiogram.dispatcher import FSMContext, Dispatcher
@@ -42,7 +43,12 @@ create_table_appeal = '''CREATE TABLE if not exists appeal(
                     photo_inventar TEXT,
                     photo_puth TEXT, 
                     contact_user TEXT, 
-                    number TEXT )'''
+                    number TEXT,
+                    status TEXT )'''
+
+create_table_status_appeal = '''CREATE TABLE if not exists status_appeal(
+                    status TEXT )'''
+
 
 def connect_setting():
     global db_connection
@@ -63,13 +69,12 @@ def connect_setting():
             cursor.execute(create_table_photo_inv)
             cursor.execute(create_table_contact_user)
             cursor.execute(create_table_appeal)
+            cursor.execute(create_table_status_appeal)
             db_connection.commit()
             
     except Error as e:
         print('Не удалось подключиться ')
     
-
-
 
 
 async def on_startup(_):
@@ -78,9 +83,19 @@ async def on_startup(_):
         
 
 
+
+
+
+
+
 storage=MemoryStorage()
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=storage)
+
+
+
+
+
 
 ############################################################################################################################################################################################
 #################   СТАРТ БОТА  ######################################
@@ -231,13 +246,14 @@ async def numberAppeal(message: types.Message, state: FSMContext):
         contact_user = message.contact.phone_number 
 
         data['GLcontact_user'] = contact_user
+        data['GLstatus'] = 'В обработке'
         sql = "insert into contact_user(id_user, contact_user) values(%s, %s)" 
         val =(id_user, contact_user)
         cur.execute(sql,val) 
         db_connection.commit()
 
-        appealsql = "insert into appeal(id_user, firstname, lastname, name_device, description, photo_inventar, photo_puth, contact_user, number ) values(%s, %s, %s, %s, %s, %s, %s, %s, %s)" 
-        datasql =(data['GLid_user'], data['GLfirstname'],  data['GLlastname'], data['GLname_device'], data['GLdescription'], data['GLphoto_inventar'],data['GLphoto_puth'], data['GLcontact_user'], data['appeal'])
+        appealsql = "insert into appeal(id_user, firstname, lastname, name_device, description, photo_inventar, photo_puth, contact_user, number, status ) values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" 
+        datasql =(data['GLid_user'], data['GLfirstname'],  data['GLlastname'], data['GLname_device'], data['GLdescription'], data['GLphoto_inventar'],data['GLphoto_puth'], data['GLcontact_user'],data['appeal'],  data['GLstatus'])
         cur.execute(appealsql,datasql) 
         db_connection.commit()
             
