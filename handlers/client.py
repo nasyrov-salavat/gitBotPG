@@ -50,7 +50,12 @@ create_table_status_appeal = '''CREATE TABLE if not exists status_appeal(
                     status TEXT )'''
 
 
-def connect_setting():
+
+    
+
+
+async def on_startup(_):
+    print('Происходит подключение к базе данных')
     global db_connection
     db_connection = None
     try: 
@@ -74,12 +79,7 @@ def connect_setting():
             
     except Error as e:
         print('Не удалось подключиться ')
-    
 
-
-async def on_startup(_):
-    print('Происходит подключение к базе данных')
-    connect_setting()
         
 
 
